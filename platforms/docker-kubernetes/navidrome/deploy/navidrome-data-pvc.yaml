@@ -1,0 +1,14 @@
+# PVC is specifying attributes for storage
+# This one is for data and we need to read and write to it
+# When the container is disposed the data remains on storage
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: navidrome-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

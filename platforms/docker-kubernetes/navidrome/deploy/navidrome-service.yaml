@@ -1,0 +1,14 @@
+# Name deployment as a service so kubernetes can look it up conveniently
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: navidrome-service
+spec:
+  type: NodePort
+  selector:
+    app: navidrome
+  ports:
+    - port: 4533
+      targetPort: 4533
+      nodePort: 30033

@@ -1,0 +1,41 @@
+# this is actual deployment 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: navidrome
+spec:
+  replicas: 1         # dockercompose equivalent of "restart: unless-stopped"
+  selector:
+    matchLabels:
+      app: navidrome  # couples into the service named "navidrome"
+  template:
+    metadata:
+      labels:
+        app: navidrome
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 20   # id command gives 20 for my groupID staff
+      containers:
+        - name: navidrome
+          image: deluan/navidrome:latest # makes assumption docker image is in this address
+          ports:
+            - containerPort: 4533
+          env:
+            - name: LOGLEVEL
+              value: "debug"
+          volumeMounts:
+            - name: navidrome-data      # appears under volumes
+              mountPath: /data          # path inside container
+            - name: navidrome-music
+              mountPath: /music
+              readOnly: true            # enforce ready only 
+      volumes:
+        - name: navidrome-data 
+          persistentVolumeClaim:
+            claimName: navidrome-data-pvc
+        - name: navidrome-music
+          persistentVolumeClaim:
+            claimName: navidrome-music-pvc
