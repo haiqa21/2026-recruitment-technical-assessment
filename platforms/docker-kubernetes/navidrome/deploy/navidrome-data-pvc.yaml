@@ -12,3 +12,5 @@ spec:
   resources:
     requests:
       storage: 5Gi
+  hostPath:
+    path: /home/users/haiqa/experiments/data
